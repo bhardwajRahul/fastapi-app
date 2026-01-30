@@ -161,4 +161,4 @@ The database is configured to use SQLite by default, but you can easily switch t
 
 [MIT](http://opensource.org/licenses/MIT)
 
-Copyright (c) 2024-2025, Paulo Coutinho
+Copyright (c) 2024-2026, Paulo Coutinho
