@@ -137,23 +137,21 @@ http://localhost:8000/docs
 The project includes a sample database model with the following structure:
 
 ```sql
-CREATE TABLE `my_model` (
-    `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    `field1` VARCHAR(255) NULL,
-    `field2` BOOLEAN NULL,
-    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` DATETIME NULL,
-    UNIQUE (`id`)
+CREATE TABLE my_model (
+    id SERIAL PRIMARY KEY,
+    field1 VARCHAR(255) NOT NULL,
+    field2 BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
 );
 ```
 
 This model demonstrates:
 - Auto-incrementing primary key (`id`)
 - String field with maximum length of 255 characters (`field1`)
-- Boolean field (`field2`)
+- Boolean field with default value (`field2`)
 - Automatic timestamp for record creation (`created_at`)
-- Optional timestamp for record updates (`updated_at`)
-- Unique constraint on the primary key
+- Automatic timestamp for record updates (`updated_at`)
 
 The database is configured to use SQLite by default, but you can easily switch to other databases by modifying the `DATABASE_URL` environment variable.
 
