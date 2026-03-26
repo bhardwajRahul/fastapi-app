@@ -50,3 +50,4 @@ poetry.lock
 *.db
 .coverage
 coverage.xml
+.fastapicloud
