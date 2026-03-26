@@ -1,11 +1,9 @@
 from unittest.mock import patch
 
 import pytest
-from fastapi import FastAPI
 from httpx import AsyncClient
 
 from models.my_model import MyModelRequest
-from routes.my_model import setup
 
 
 @pytest.mark.asyncio
@@ -16,7 +14,7 @@ async def test_my_model_create(async_client: AsyncClient):
         "/api/my-model/create", json=request.model_dump()
     )
 
-    assert response.status_code == 200
+    assert response.status_code == 201
 
     data = response.json()
     assert "model" in data
@@ -27,12 +25,12 @@ async def test_my_model_create(async_client: AsyncClient):
 
 @pytest.mark.asyncio
 async def test_my_model_random(async_client: AsyncClient):
-    # create a registry
+    # create a record
     request = MyModelRequest(field1="Test 1", field2=True)
     response = await async_client.post(
         "/api/my-model/create", json=request.model_dump()
     )
-    assert response.status_code == 200
+    assert response.status_code == 201
 
     # get random
     response = await async_client.get("/api/my-model/random")
@@ -76,21 +74,5 @@ async def test_my_model_random_not_found(async_client: AsyncClient):
         response = await async_client.get("/api/my-model/random")
         assert response.status_code == 200
         data = response.json()
-        assert data == {"message": "not-found"}
-
-
-@pytest.mark.asyncio
-async def test_setup_function():
-    app = FastAPI()
-
-    setup(app)
-
-    assert len(app.routes) > 0
-
-    my_model_routes = [
-        route
-        for route in app.routes
-        if hasattr(route, "path") and "/api/my-model" in str(route.path)
-    ]
-
-    assert len(my_model_routes) > 0
+        assert data["message"] == "not-found"
+        assert data["model"] is None

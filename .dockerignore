@@ -1,2 +1,2 @@
 *.db
-mysql-data
+postgres-data

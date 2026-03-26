@@ -7,18 +7,20 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - mysql
+      - postgres
     environment:
-      - DATABASE_URL=mysql+mysqlconnector://user:password@host:3306/database
+      - DATABASE_URL=postgresql+asyncpg://app:app@postgres:5432/app
     volumes:
       - .:/app
 
-  mysql:
-    image: mysql:8.4.0
+  postgres:
+    image: postgres:17
     restart: always
     ports:
-      - "3306:3306"
+      - "5432:5432"
     environment:
-      - MYSQL_ROOT_PASSWORD=password
+      - POSTGRES_USER=app
+      - POSTGRES_PASSWORD=app
+      - POSTGRES_DB=app
     volumes:
-      - ./mysql-data:/var/lib/mysql
+      - ./postgres-data:/var/lib/postgresql/data

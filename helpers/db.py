@@ -4,7 +4,7 @@ from typing import Annotated, AsyncIterator
 
 from fastapi import Depends
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
 
 logger = logging.getLogger(__name__)
@@ -28,14 +28,14 @@ class Base(DeclarativeBase):
     pass
 
 
-async def get_session() -> AsyncIterator[async_sessionmaker]:
+async def get_session() -> AsyncIterator[AsyncSession]:
     async with AsyncSessionLocal() as session:
         try:
             yield session
-        except SQLAlchemyError as e:
-            logger.exception(f"Database session error: {e}")
+        except SQLAlchemyError:
+            logger.exception("Database session error")
             await session.rollback()
             raise
 
 
-AsyncSession = Annotated[async_sessionmaker, Depends(get_session)]
+DatabaseSession = Annotated[AsyncSession, Depends(get_session)]

@@ -2,7 +2,6 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from helpers.db import get_session
 

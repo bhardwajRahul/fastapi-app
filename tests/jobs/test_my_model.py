@@ -25,7 +25,8 @@ async def test_job_create_my_model(db: AsyncSession):
         assert call_args[0][0].field2 == False
 
     with patch("services.my_model.create", return_value=1) as mock_create:
-        with patch("builtins.print") as mocked_print:
+        with patch("jobs.my_model.logger") as mock_logger:
             await my_model.job_create_my_model()
-            print_arg = mocked_print.call_args[0][0]
-            assert print_arg.startswith("Job Executed")
+            mock_logger.info.assert_called_once()
+            log_arg = mock_logger.info.call_args[0][0]
+            assert log_arg.startswith("Job executed")

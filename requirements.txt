@@ -4,9 +4,9 @@ black>=25.9.0
 pydantic>=2.11.9
 sqlalchemy[asyncio]>=2.0.43
 aiosqlite>=0.21.0
-fastapi
+asyncpg>=0.30.0
+fastapi[standard]
 uvicorn
-requests
 throttled
 apscheduler
 

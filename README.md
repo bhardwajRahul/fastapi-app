@@ -19,7 +19,7 @@ A FastAPI complete application with nice features and tests.
 - Static files support
 - Docker support (single and compose)
 - Ready for production
-- Support for Python version from 3.9 to 3.14
+- Support for Python version from 3.10 to 3.14
 
 ## Use Cases
 
@@ -39,7 +39,7 @@ APIs are essential for various types of applications, including:
 To start locally execute:
 
 ```bash
-uvicorn main:app --host 0.0.0.0 --port 8000  --log-level debug --reload
+uvicorn main:app --host 0.0.0.0 --port 8000 --log-level debug --reload
 ```
 
 or
@@ -67,7 +67,7 @@ make docker-single-start
 To use a different database url when run:
 
 ```bash
-docker run --rm -v ./:/app -p 8000:8000 -e DATABASE_URL="sqlite:///./other.db" fastapi-app
+docker run --rm -v ./:/app -p 8000:8000 -e DATABASE_URL="sqlite+aiosqlite:///./other.db" fastapi-app
 ```
 
 ## Docker Compose
