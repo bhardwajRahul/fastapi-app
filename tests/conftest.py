@@ -33,7 +33,6 @@ async def db():
             yield session
         finally:
             await session.rollback()
-            await session.close()
 
     async with async_engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
@@ -57,6 +56,6 @@ def client(app: FastAPI) -> TestClient:
     return TestClient(app)
 
 
-@pytest.fixture
+@pytest_asyncio.fixture
 async def async_client(app: FastAPI) -> AsyncClient:
     return AsyncClient(transport=ASGITransport(app=app), base_url="http://test")

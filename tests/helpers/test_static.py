@@ -4,7 +4,7 @@ from fastapi.testclient import TestClient
 from helpers import static
 
 
-def test_with_cors(app: FastAPI):
+def test_static_files():
     app = FastAPI()
     static.setup(app)
     client = TestClient(app)
@@ -12,4 +12,4 @@ def test_with_cors(app: FastAPI):
     response = client.get("/")
     assert response.status_code == 200
     assert "text/html" in response.headers["content-type"]
-    assert "FastAPI APP" in response.text
+    assert "FastAPI App" in response.text

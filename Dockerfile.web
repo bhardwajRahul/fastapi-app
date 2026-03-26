@@ -1,13 +1,7 @@
 FROM python:3.13
 
 # environment
-ENV DATABASE_URL="sqlite:///./app.db"
-
-# install dependencies
-RUN apt-get update \
-	&& apt-get install -y --no-install-recommends \
-    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
-	&& rm -rf /var/lib/apt/lists/*
+ENV DATABASE_URL="sqlite+aiosqlite:///./app.db"
 
 # pip
 RUN python3 -m pip install --upgrade pip
@@ -18,6 +12,9 @@ WORKDIR /app
 # install app
 COPY requirements.txt .
 RUN python3 -m pip install --no-cache-dir -r requirements.txt
+
+# copy app
+COPY . .
 
 # expose ports
 EXPOSE 8000

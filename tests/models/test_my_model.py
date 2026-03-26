@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from models.my_model import MyModel, MyModelRequest, MyModelResponse
+from models.my_model import MyModel, MyModelRequest, MyModelResponse, MyModelSchema
 
 
 def test_my_model_creation():
@@ -11,33 +11,47 @@ def test_my_model_creation():
     assert obj.id is None
 
 
-def test_my_model_response_serialize_model_with_none():
+def test_my_model_schema_from_orm():
+    obj = MyModel(field1="Test Field 1", field2=False)
+    obj.id = 1
+    obj.created_at = datetime(2023, 1, 1, 12, 0, 0)
+    obj.updated_at = datetime(2023, 1, 1, 12, 0, 0)
+
+    schema = MyModelSchema.model_validate(obj)
+
+    assert schema.id == 1
+    assert schema.field1 == "Test Field 1"
+    assert schema.field2 == False
+    assert schema.created_at == datetime(2023, 1, 1, 12, 0, 0)
+    assert schema.updated_at == datetime(2023, 1, 1, 12, 0, 0)
+
+
+def test_my_model_response_with_none():
     response = MyModelResponse(message="Test message", model=None)
 
-    serialized_data = response.model_dump()
+    data = response.model_dump()
 
-    assert serialized_data["message"] == "Test message"
-    assert serialized_data["model"] is None
+    assert data["message"] == "Test message"
+    assert data["model"] is None
 
 
-def test_my_model_response_serialize_model_with_valid_model():
-    mock_model = MyModel(field1="Test Field 1", field2=False)
+def test_my_model_response_with_valid_model():
+    obj = MyModel(field1="Test Field 1", field2=False)
+    obj.id = 1
+    obj.created_at = datetime(2023, 1, 1, 12, 0, 0)
+    obj.updated_at = datetime(2023, 1, 1, 12, 0, 0)
 
-    mock_model.id = 1
-    mock_model.created_at = datetime(2023, 1, 1, 12, 0, 0)
-    mock_model.updated_at = datetime(2023, 1, 1, 12, 0, 0)
+    response = MyModelResponse(message="Test message", model=obj)
 
-    response = MyModelResponse(message="Test message", model=mock_model)
+    data = response.model_dump()
 
-    serialized_data = response.model_dump()
-
-    assert serialized_data["message"] == "Test message"
-    assert serialized_data["model"] is not None
-    assert serialized_data["model"]["id"] == 1
-    assert serialized_data["model"]["field1"] == "Test Field 1"
-    assert serialized_data["model"]["field2"] == False
-    assert serialized_data["model"]["created_at"] == datetime(2023, 1, 1, 12, 0, 0)
-    assert serialized_data["model"]["updated_at"] == datetime(2023, 1, 1, 12, 0, 0)
+    assert data["message"] == "Test message"
+    assert data["model"] is not None
+    assert data["model"]["id"] == 1
+    assert data["model"]["field1"] == "Test Field 1"
+    assert data["model"]["field2"] == False
+    assert data["model"]["created_at"] == datetime(2023, 1, 1, 12, 0, 0)
+    assert data["model"]["updated_at"] == datetime(2023, 1, 1, 12, 0, 0)
 
 
 def test_my_model_request_validation():

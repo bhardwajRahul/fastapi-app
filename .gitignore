@@ -36,8 +36,8 @@ CMakeLists.txt.user
 # flutter
 *.reflectable.dart
 
-# mysql
-mysql-data
+# postgres
+postgres-data
 
 # python
 *.egg-info
@@ -48,6 +48,5 @@ poetry.lock
 
 # app
 *.db
-mysql-data
 .coverage
 coverage.xml

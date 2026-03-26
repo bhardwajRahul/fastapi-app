@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel, ConfigDict, field_serializer
+from pydantic import BaseModel, ConfigDict
 from sqlalchemy import Boolean, DateTime, String, func
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -30,31 +30,21 @@ class MyModel(Base):
     )
 
 
+class MyModelSchema(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    field1: str
+    field2: bool
+    created_at: datetime
+    updated_at: datetime
+
+
 class MyModelRequest(BaseModel):
     field1: str
     field2: bool
 
 
 class MyModelResponse(BaseModel):
-    message: Optional[str] = None
-    model: Optional[MyModel] = None
-
-    model_config = ConfigDict(
-        from_attributes=True,
-        use_enum_values=True,
-        validate_assignment=True,
-        arbitrary_types_allowed=True,
-    )
-
-    @field_serializer("model")
-    def serialize_model(self, model: Optional[MyModel]) -> Optional[dict]:
-        if model is None:
-            return None
-
-        return {
-            "id": model.id,
-            "field1": model.field1,
-            "field2": model.field2,
-            "created_at": model.created_at,
-            "updated_at": model.updated_at,
-        }
+    message: str
+    model: Optional[MyModelSchema] = None

@@ -1,5 +1,3 @@
-ROOT_DIR=${PWD}
-
 .DEFAULT_GOAL := help
 
 # general
@@ -36,7 +34,7 @@ deps-update:
 	pcu -u
 
 start:
-	uvicorn main:app --host 0.0.0.0 --port 8000  --log-level debug --reload
+	uvicorn main:app --host 0.0.0.0 --port 8000 --log-level debug --reload
 
 test:
 	python3 -m pytest
