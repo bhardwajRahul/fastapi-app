@@ -1,14 +1,22 @@
+import os
+
 from fastapi import FastAPI
 from starlette.middleware.base import BaseHTTPMiddleware
-from throttled.fastapi import IPLimiter, TotalLimiter
+from throttled.fastapi import IPLimiter
 from throttled.models import Rate
 from throttled.storage.memory import MemoryStorage
 
+DEFAULT_RATE_LIMIT = 100
+DEFAULT_RATE_LIMIT_WINDOW = 60
+
+RATE_LIMIT = int(os.environ.get("RATE_LIMIT", DEFAULT_RATE_LIMIT))
+RATE_LIMIT_WINDOW = int(os.environ.get("RATE_LIMIT_WINDOW", DEFAULT_RATE_LIMIT_WINDOW))
+
 
 def setup(app: FastAPI):
-    memory = MemoryStorage(cache={})
-    total_limiter = TotalLimiter(limit=Rate(1, 1), storage=memory)
-    ip_limiter = IPLimiter(limit=Rate(5, 1), storage=memory)
+    storage = MemoryStorage(cache={})
 
-    app.add_middleware(BaseHTTPMiddleware, dispatch=total_limiter.dispatch)
-    app.add_middleware(BaseHTTPMiddleware, dispatch=ip_limiter.dispatch)
+    # limit each client by its source ip using a sliding window
+    limiter = IPLimiter(limit=Rate(RATE_LIMIT, RATE_LIMIT_WINDOW), storage=storage)
+
+    app.add_middleware(BaseHTTPMiddleware, dispatch=limiter.dispatch)

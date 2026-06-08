@@ -10,6 +10,8 @@ services:
       - postgres
     environment:
       - DATABASE_URL=postgresql+asyncpg://app:app@postgres:5432/app
+      # set to the reverse proxy ip range so per-ip rate limiting trusts x-forwarded-for
+      # - FORWARDED_ALLOW_IPS=10.0.0.0/8
     volumes:
       - .:/app
 
