@@ -1,10 +1,10 @@
 # app
 pygemstones>=0.0.14
-black>=25.9.0
-pydantic>=2.11.9
-sqlalchemy[asyncio]>=2.0.43
-aiosqlite>=0.21.0
-asyncpg>=0.30.0
+black>=26.5.1
+pydantic>=2.13.4
+sqlalchemy[asyncio]>=2.0.50
+aiosqlite>=0.22.1
+asyncpg>=0.31.0
 fastapi[standard]
 uvicorn
 throttled
